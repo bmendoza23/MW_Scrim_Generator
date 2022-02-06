@@ -1,0 +1,19 @@
+{
+    "maps":[
+        "arlov_peak",
+        "azhir_cave",
+        "gun_runner",
+        "hackney_yard",
+        "shoot_house",
+        "vacant",
+        "khandor_hideout",
+        "hardhat",
+        "hovec_sawmill"
+    ],
+    "gamemodes":[
+        "snd",
+        "hardpoint",
+        "dom",
+        "ctf"
+    ]
+}
