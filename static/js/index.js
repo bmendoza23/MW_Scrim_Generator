@@ -2,7 +2,10 @@
 console.log("index.js imported");
 
 //Global Variables 
-let seriesLength;
+let seriesLength,
+    team1,
+    team2;
+let mapsPlaying = [];
 let playerList = [];
 const mwInfoJSON = {
     "maps":[
@@ -25,7 +28,6 @@ const mwInfoJSON = {
 };// want to use require('../json/mwInfo.json'); but it seems little complicated
 let mapsList = [];
 let gamemodesList = [];
-let team1, team2;
 
 
 //Parses mwInfoJSON object to mapsList and gamemodeList
@@ -56,15 +58,19 @@ function getSeriesLength() {
     switch (seriesLengthInput){
         case '1of1':
             seriesLength = 1;
+            break;
         case '2of3':
             seriesLength = 3;
+            break;
         case '3of5':
             seriesLength = 5;
+            break;
         case '4of7':
             seriesLength = 7;
+            break;
     }
 
-    $('#msg').text("Series Length Selected: " + seriesLength);
+    $('#seriesLengthMsg').text("Series Length Selected: " + seriesLength);
 };
  
 //Adds entered player to List
@@ -89,7 +95,6 @@ function addPlayerBtnClick(){
 }
 
 //Fisher-Yates Shuffle Algorithm
-
 function shuffle(arr) {
     let currentIndex = arr.length,  randomIndex;
   
@@ -125,10 +130,35 @@ function randomizeTeams(){
    }
 }
 
+//Selecting random map from map list
+function selRandomMap(){
+    //Getting random index
+    let map = mapsList[Math.floor( Math.random() * mapsList.length)];
+    console.log(map);
+    return map;
+}
+
+//Randomizing maps list
+function generateMaps(){
+    //Clearing mapsPlaying array
+    mapsPlaying.splice(0,mapsPlaying.length)
+    //Adds maps to mapsPlaying array
+    for(let i = 0; i < seriesLength; i++)
+    {
+        mapsPlaying.push(selRandomMap());
+    }
+    console.log('Maps Generated:' + mapsPlaying);
+}
+
+function displayMaps(){
+    
+}
+
 //Done Button Click
 function done(){ 
     getSeriesLength();
     randomizeTeams();
+    generateMaps();
 }
 
 
