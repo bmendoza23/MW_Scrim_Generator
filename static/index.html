@@ -9,7 +9,25 @@
     <script type="text/javascript" src="/js/index.js"></script>
 </head>
 <body>
-        <button onclick="test()">click me</button> 
-        <div id="msg"></div>
+        <h1> MW Scrim Generator</h1> 
+        <div id="msg"> "We're gonna have some fun - Captain Price" </div> <br/>
+        <div id="playerList"> 
+            <h3>Player List: </h3>
+        </div>
+
+        <form id="seriesLengthForm">
+            <h3>Select Series Length</h3> 
+            <input type = "radio" value = "1of1" name = "seriesLengthRadio" /> 1 of 1 <br />
+            <input type = "radio" value = "2of3" name = "seriesLengthRadio" /> 2 of 3 <br />
+            <input type = "radio" value = "3of5" name = "seriesLengthRadio" /> 3 of 5 <br />
+            <input type = "radio" value = "4of7" name = "seriesLengthRadio" /> 4 of 7 <br />
+        </form>    
+        <form id="userEntry"> 
+            <h3> Enter Users:</h3>
+            <input type = "text" id = "playerID">
+        </form>
+        <button id = "playerAddBtn" onclick="addPlayerBtnClick()"> Add </button> <br />
+
+        <button id = "done" onclick = 'done()'> Done </button>
 </body>
-</html>
+</html> 
