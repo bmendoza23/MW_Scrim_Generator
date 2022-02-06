@@ -73,6 +73,8 @@ function addPlayer(){
     playerList.push($newPlayer);             //Adding new Player to PlayerList
     console.log("New Player Added to list: " + $newPlayer);
     console.log("Player List: " + playerList);
+    
+    $('#playerID').val(''); //Clears text box
 }
 
 //Refreshes playerList div
@@ -99,7 +101,7 @@ function shuffle(arr) {
       //Swapping index with random index.
       [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
     }
-    return array;
+    return arr;
   }
 
 //Randomize Teams
@@ -110,16 +112,16 @@ function randomizeTeams(){
     //Split Array into 2
     var listHalf = Math.ceil(playerList.length / 2);        //Finding middle point of playerList
     team1 = playerList.slice(0,listHalf);                   //Slicing first half of list to team1
-    team2 = playerList.slice(listHalf+1, playerList.length);//Slicing second half of list to team2
+    team2 = playerList.slice(listHalf, playerList.length);//Slicing second half of list to team2
     
     //Appending team1 and team2 to Teams div:
     //Looping over team1 list
     for (let player in team1){
-         $("#team1").append( "<br>"+ player+ "</br>" ); //Appending player to team1
+         $("#team1").append( "<br>"+ team1[player]+ "</br>" ); //Appending player to team1
     };
 
     for (let player in team2){
-        $("#team2").append( "<br>"+ player+ "</br>" );
+        $("#team2").append( "<br>"+ team2[player]+ "</br>" );
    }
 }
 
