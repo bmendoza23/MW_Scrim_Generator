@@ -149,16 +149,32 @@ function generateMaps(){
     }
     console.log('Maps Generated:' + mapsPlaying);
 }
+//Function takes string input and formats to change first letter to uppercase and insert a space
+function upperCaseAndSplit(string){
+    let splitString = string.split('_');
+    let formattedStrings = [];
+    for(let i = 0; i<splitString.length;i++){
+        formattedStrings.push(splitString[i].charAt(0).toUpperCase() + splitString[i].slice(1));
+    }
+    string = formattedStrings.join(' ');
+    return string;
+}
 
 function displayMaps(){
-    
+    generateMaps();
+    for(let map in mapsPlaying){
+        let mapNameString = upperCaseAndSplit(mapsPlaying[map]);
+        $('#mapName').append('<td>'+ mapNameString + '</td>');
+        //$('#mapsImg').append(mapsList[map])
+    }
+
 }
 
 //Done Button Click
 function done(){ 
     getSeriesLength();
     randomizeTeams();
-    generateMaps();
+    displayMaps();
 }
 
 
