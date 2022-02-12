@@ -11,9 +11,6 @@
 </head>
 <body>
         <h1> MW Scrim Generator</h1> 
-        <div id="playerList"> 
-            <h3>Player List: </h3>
-        </div>
         <form id="seriesLengthForm">
             <h3>Select Series Length</h3> 
             <input type = "radio" value = "1of1" name = "seriesLengthRadio" /> 1 of 1 <br />
@@ -27,6 +24,9 @@
         </form>
         <button id = "playerAddBtn" onclick="addPlayerBtnClick()"> Add </button> <br />
         <button id = "done" onclick = 'done()'> Done </button>
+        <div id="playerList"> 
+            <h3>Player List: </h3>
+        </div>
         <div id="seriesLengthMsg"></div> <br/>
         <div id="teams">
             <h3>Teams:</h3>
@@ -42,11 +42,14 @@
         <div id="maps">
             <h3>Maps:</h3>
             <table>
+                <tr id="mapImg">
+                    
+                </tr>
                 <tr id="mapName"> 
 
                 </tr>
-                <tr id="mapImg">
-                    
+                <tr id="gamemode">
+
                 </tr>
             </table>
         </div>

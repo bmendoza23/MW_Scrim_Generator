@@ -7,6 +7,7 @@ let seriesLength,
     team2;
 let mapsPlaying = [];
 let playerList = [];
+let gmsPlaying = [];    
 const mwInfoJSON = {
     "maps":[
         "arlov_peak",
@@ -19,15 +20,17 @@ const mwInfoJSON = {
         "hardhat",
         "hovec_sawmill"
     ],
-    "gamemodes":[
-        "snd",
+    "respawn_gamemodes":[
         "hardpoint",
-        "dom",
-        "ctf"
+        "domination",
+        "capture_the_flag"
+    ],
+    "no_respawn_gamemodes":[
+        "snd"
     ]
 };// want to use require('../json/mwInfo.json'); but it seems little complicated
 let mapsList = [];
-let gamemodesList = [];
+let rsGamemodesList = [];
 
 
 //Parses mwInfoJSON object to mapsList and gamemodeList
@@ -39,16 +42,47 @@ function parseMWInfo(){
         mapsList.push(map);
     }
     console.log("Maps List: " + mapsList); 
-    //Pushes gamemodes to gamemodesList
-    for (let gamemode of mwInfoJSON.gamemodes)
+    //Pushes gamemodes to rsGamemodesList
+    for (let gamemode of mwInfoJSON.respawn_gamemodes)
     {
-        gamemodesList.push(gamemode);
+        rsGamemodesList.push(gamemode);
     }
-    console.log("Gamemodes List: " + gamemodesList);
-};
-
-
+    console.log("Gamemodes List: " + rsGamemodesList);
+}
 parseMWInfo();
+
+//Function takes string input and formats to change first letter to uppercase and insert a space
+function upperCaseAndSplit(string){
+    let splitString = string.split('_');
+    let formattedStrings = [];
+    for(let i = 0; i<splitString.length;i++){
+        formattedStrings.push(splitString[i].charAt(0).toUpperCase() + splitString[i].slice(1));
+    }
+    string = formattedStrings.join(' ');
+    return string;
+}
+
+//Fisher-Yates Shuffle Algorithm
+function shuffle(arr) {
+    let currentIndex = arr.length,  randomIndex;
+  
+    // While there are still elements in the array
+    while (currentIndex != 0) { 
+      randomIndex = Math.floor(Math.random() * currentIndex);   //Picking random element
+      currentIndex--;
+  
+      //Swapping index with random index.
+      [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
+    }
+    return arr;
+}
+
+//Selects random index from a given array
+function selectRandomIndex(array)
+{
+    let currElement = array[Math.floor(Math.random()*array.length)];
+    return currElement;
+}
 
 //Gets series length
 function getSeriesLength() {
@@ -76,10 +110,15 @@ function getSeriesLength() {
 //Adds entered player to List
 function addPlayer(){
     let $newPlayer = $('#playerID').val();   //Grabbing Player ID from entry form
-    playerList.push($newPlayer);             //Adding new Player to PlayerList
-    console.log("New Player Added to list: " + $newPlayer);
-    console.log("Player List: " + playerList);
-    
+    if ($newPlayer === '')
+    {
+        alert('Cannot add blank player to list');
+    }
+    else if ($newPlayer !== ''){
+        playerList.push($newPlayer);             //Adding new Player to PlayerList
+        console.log("New Player Added to list: " + $newPlayer);
+        refreshPlayerList();
+    }
     $('#playerID').val(''); //Clears text box
 }
 
@@ -91,23 +130,7 @@ function refreshPlayerList(){
 //Adds player to list + refreshes playerList div
 function addPlayerBtnClick(){
     addPlayer();
-    refreshPlayerList();
 }
-
-//Fisher-Yates Shuffle Algorithm
-function shuffle(arr) {
-    let currentIndex = arr.length,  randomIndex;
-  
-    // While there are still elements in the array
-    while (currentIndex != 0) { 
-      randomIndex = Math.floor(Math.random() * currentIndex);   //Picking random element
-      currentIndex--;
-  
-      //Swapping index with random index.
-      [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
-    }
-    return arr;
-  }
 
 //Randomize Teams
 function randomizeTeams(){
@@ -130,14 +153,6 @@ function randomizeTeams(){
    }
 }
 
-//Selecting random map from map list
-function selRandomMap(){
-    //Getting random index
-    let map = mapsList[Math.floor( Math.random() * mapsList.length)];
-    console.log(map);
-    return map;
-}
-
 //Randomizing maps list
 function generateMaps(){
     //Clearing mapsPlaying array
@@ -145,35 +160,63 @@ function generateMaps(){
     //Adds maps to mapsPlaying array
     for(let i = 0; i < seriesLength; i++)
     {
-        mapsPlaying.push(selRandomMap());
+        mapsPlaying.push(selectRandomIndex(mapsList));
     }
     console.log('Maps Generated:' + mapsPlaying);
 }
-//Function takes string input and formats to change first letter to uppercase and insert a space
-function upperCaseAndSplit(string){
-    let splitString = string.split('_');
-    let formattedStrings = [];
-    for(let i = 0; i<splitString.length;i++){
-        formattedStrings.push(splitString[i].charAt(0).toUpperCase() + splitString[i].slice(1));
+
+//Randomizes gamemodes
+function generateGMsPlaying(){   //Variable to hold index for gms array
+                 //Array to hold gamemodes
+    //loop fills scrimGms array
+    for (let i = 0; i < seriesLength; i++){
+        console.log('index ' + i);
+        //if index the first game
+        if (i === 0){
+            gmsPlaying.push(selectRandomIndex(rsGamemodesList));
+            console.log('Pushed 0 ' + gmsPlaying[i]);
+        }
+        //if index is even
+        else if ((i % 2 === 0) && (i !== 0)){
+            gmsPlaying.push("Search and Destroy");
+            console.log('Pushed even ' + gmsPlaying[i]);
+        }
+        //If index is odd
+        else { 
+            gmsPlaying.push(selectRandomIndex(rsGamemodesList));
+            console.log('Pushedodd ' + gmsPlaying[i]);
+
+        }
     }
-    string = formattedStrings.join(' ');
-    return string;
+    console.log('Gamemodes playing: ' + gmsPlaying); 
+};
+
+//Generates gamemodes onto page
+function displayGMs(){
+    generateGMsPlaying();
+    //loops over scrimGms
+    for (let gm in gmsPlaying){
+        let gmString = upperCaseAndSplit(gmsPlaying[gm]);
+        $('#gamemode').append('<td>'+ gmString + '</td>');
+    }
 }
 
+//Displays maps in maps div
 function displayMaps(){
     generateMaps();
     for(let map in mapsPlaying){
         let mapNameString = upperCaseAndSplit(mapsPlaying[map]);
         $('#mapName').append('<td>'+ mapNameString + '</td>');
+        //Grabbing map imgs
         //$('#mapsImg').append(mapsList[map])
     }
-
 }
 
 //Done Button Click
 function done(){ 
     getSeriesLength();
     randomizeTeams();
+    displayGMs();
     displayMaps();
 }
 
